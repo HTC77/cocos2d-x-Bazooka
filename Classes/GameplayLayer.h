@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "Enemy.h"
+#include "Projectile.h"
 USING_NS_CC;
 
 class GameplayLayer : public Layer
@@ -17,9 +18,12 @@ public:
     Vec2 origin;
 
 	Vector<Enemy*> enemies;
-	Vector<Enemy*>* getEnemiesArray();
-
 	Vector<Enemy*> enemiesToBeDeleted;
+	Vector<Enemy*>* getEnemiesArray();
+	
+	Vector<Projectile*> enemyBullets;
+	Vector<Projectile*> enemyBulletsToBeDeleted;
+	Vector<Projectile*>* getEnemyBulletsArray();
 
 	void update();
 };

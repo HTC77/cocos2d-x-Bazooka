@@ -1,8 +1,22 @@
 #include "Enemy.h"
 #include "SimpleAudioEngine.h"
+#include "Projectile.h"
+#include "GameplayLayer.h"
+
+Enemy* Enemy::create(GameplayLayer* _gameplayLayer)
+{
+	Enemy* obj = new Enemy();
+	if (obj && obj->init(_gameplayLayer))
+	{
+		obj->autorelease();
+		return obj;
+	}
+	CC_SAFE_DELETE(obj);
+	return nullptr;
+}
 
 // on "init" you need to initialize your instance
-bool Enemy::init()
+bool Enemy::init(GameplayLayer* _gameplayLayer)
 {
     //////////////////////////////
     // 1. super init first
@@ -14,6 +28,7 @@ bool Enemy::init()
     visibleSize = Director::getInstance()->getVisibleSize();
     winSize = Director::getInstance()->getWinSize();
     origin = Director::getInstance()->getVisibleOrigin();  
+	gameplayLayer = _gameplayLayer;
 
 	float mrand = rand() % 3 + 1;
 	float h = winSize.height * mrand * 0.25;
@@ -22,13 +37,25 @@ bool Enemy::init()
 		h);
 	this->setPosition(p);
 
+	this->schedule(schedule_selector(Enemy::shoot), 1.3);
+
     return true;
+}
+
+void Enemy::shoot(float delta)
+{
+	Vec2 p = this->getPosition();
+	p.x = p.x - this->getContentSize().width / 2;
+	p.y = p.y - this->getContentSize().height * 0.05;
+	Projectile* pr = Projectile::create(p, 1);
+	gameplayLayer->addChild(pr);
+	gameplayLayer->getEnemyBulletsArray()->pushBack(pr);
 }
 
 void Enemy::update()
 {
 	Vec2 _mp = this->getPosition();
-	Vec2 _Mp = _mp + Vec2(-3, 0);
+	Vec2 _Mp = _mp + Vec2(-2, 0);
 	this->setPosition(_Mp);
 }
 

@@ -111,8 +111,8 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
 
 void HelloWorld::spawnEnemy(float dt)
 {
-	CCLOG("spawn enemy");
-	Enemy* e = Enemy::create();
+	Enemy* e = Enemy::create(gameplayLayer);
 	gameplayLayer->addChild(e);
+	e->shoot(0.016); // first shoot
 	gameplayLayer->getEnemiesArray()->pushBack(e);
 }

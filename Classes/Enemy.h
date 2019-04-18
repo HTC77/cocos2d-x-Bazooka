@@ -2,21 +2,21 @@
 #define __BazookaGame_Enemy__
 
 #include "cocos2d.h"
+class GameplayLayer;
 USING_NS_CC;
 
 class Enemy : public Sprite
 {
 public:
 
-    virtual bool init();
+	static Enemy* create(GameplayLayer* _gameplayLayer);
+    virtual bool init(GameplayLayer* _gameplayLayer);
     
     Size visibleSize;
     Size winSize;
     Vec2 origin;
-
-    // implement the "static create()" method manually
-    CREATE_FUNC(Enemy);
-
+	GameplayLayer* gameplayLayer;
+	void shoot(float delta);
 	void update();
 };
 
