@@ -1,5 +1,5 @@
-#ifndef __Enemy__
-#define __Enemy__
+#ifndef __BazookaGame_Enemy__
+#define __BazookaGame_Enemy__
 
 #include "cocos2d.h"
 USING_NS_CC;
@@ -20,4 +20,4 @@ public:
 	void update();
 };
 
-#endif // __Enemy__
+#endif // __BazookaGame_Enemy__

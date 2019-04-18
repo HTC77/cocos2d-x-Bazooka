@@ -63,6 +63,7 @@ bool HelloWorld::init()
 	hero->setPosition(Vec2(winSize.width * 0.25, winSize.height * 0.5));
 	this->addChild(hero, 5);
 
+	// enable update
 	this->scheduleUpdate();
 
 	// touch dispatcher
@@ -73,30 +74,12 @@ bool HelloWorld::init()
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
 		touchListener, this);
 
-	// acceleration dispatcher
-	Device::setAccelerometerEnabled(true); // enable accelerometer first
-	EventListenerAcceleration* accelerateListener =
-		EventListenerAcceleration::create(
-			CC_CALLBACK_2(HelloWorld::accelerated,this));
-	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
-		accelerateListener, this);
+	// gameplay layer
+	gameplayLayer = new GameplayLayer();
+	this->addChild(gameplayLayer);
 
-	// shoot button
-	MenuItemImage* closeItem = MenuItemImage::create(
-								"CloseNormal.png",
-								"CloseSelected.png",
-								 this,
-								 menu_selector(HelloWorld::buttonControl)
-								);
-	closeItem->setPosition(Vec2(winSize.width * .125,
-		winSize.height * .125));
-	Menu* menu = Menu::create(closeItem, nullptr);
-	menu->setPosition(Vec2());
-	this->addChild(menu, 1);
-
-	// enemy
-	enemy = Enemy::create();
-	this->addChild(enemy);
+	// spawn enemy
+	this->schedule(schedule_selector(HelloWorld::spawnEnemy), 3.0f);
 
     return true;
 }
@@ -115,37 +98,21 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::update(float delta)
 {
-	float maxY = winSize.height - hero->getContentSize().height / 2;
-	float minY = hero->getContentSize().height / 2;
-	float distStep = (distFraction * delta);
-	float newY = hero->getPosition().y + distStep;
-	newY = MIN(MAX(newY, minY), maxY);
-	hero->setPosition(ccp(hero->getPosition().x, newY));
-	
-	enemy->update();
+	gameplayLayer->update();
 }
 
 bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
 {
 	Vec2 location =
 		Director::getInstance()->convertToGL(touch->getLocationInView());
-	CCMoveTo* moveAction = CCMoveTo::create(1, location);
-	hero->runAction(EaseInOut::create(moveAction,1));
-	CCLOG("Touch");
 	return true;
 }
 
-void HelloWorld::accelerated(Acceleration* acceleration, Event* event)
-{
-	distFraction = visibleSize.height* acceleration->y;
-}
 
-void HelloWorld::buttonControl(Ref* sender)
+void HelloWorld::spawnEnemy(float dt)
 {
-	Sprite* test = Sprite::create("CloseNormal.png");
-	test->setPosition(Vec2(
-		hero->getPositionX() + hero->getContentSize().width / 2,
-		hero->getPositionY()));
-	test->setScale(0.5);
-	this->addChild(test);
+	CCLOG("spawn enemy");
+	Enemy* e = Enemy::create();
+	gameplayLayer->addChild(e);
+	gameplayLayer->getEnemiesArray()->pushBack(e);
 }

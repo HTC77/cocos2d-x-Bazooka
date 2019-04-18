@@ -27,6 +27,7 @@
 
 #include "cocos2d.h"
 #include "Enemy.h"
+#include "GameplayLayer.h"
 USING_NS_CC;
 
 class HelloWorld : public cocos2d::Scene
@@ -51,10 +52,10 @@ public:
 	void onTouchEnded(Touch* touch, Event* event);
 	void onTouchCanceled(Touch* touch, Event* event);
 
-	void accelerated(Acceleration* acceleration, Event* event);
 	float distFraction;
-	void buttonControl(Ref* sender);
-	Enemy* enemy;
+	GameplayLayer* gameplayLayer;
+
+	void spawnEnemy(float dt);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
