@@ -63,6 +63,7 @@ bool HelloWorld::init()
 	hero->setPosition(Vec2(winSize.width * 0.25, winSize.height * 0.5));
 	this->addChild(hero);
 
+	this->scheduleUpdate();
     return true;
 }
 
@@ -76,4 +77,13 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
+}
+
+void HelloWorld::update(float delta)
+{
+	Vec2 p = hero->getPosition();
+	hero->setPosition(p.x + 5, p.y);
+	if (hero->getPositionX() - hero->getContentSize().width / 2 > winSize.width)
+		hero->setPosition(Vec2(0.0 - hero->getContentSize().width / 2,
+									 hero->getPositionY()));
 }

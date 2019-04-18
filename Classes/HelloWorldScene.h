@@ -46,6 +46,7 @@ public:
 
 	Sprite* hero;
 
+	void update(float delta) override;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
