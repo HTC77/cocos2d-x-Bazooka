@@ -52,6 +52,7 @@ public:
 
 	void accelerated(Acceleration* acceleration, Event* event);
 	float distFraction;
+	void buttonControl(Ref* sender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

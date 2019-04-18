@@ -61,7 +61,7 @@ bool HelloWorld::init()
 	// hero
 	hero = Sprite::create("bookGame_tinyBazooka.png");
 	hero->setPosition(Vec2(winSize.width * 0.25, winSize.height * 0.5));
-	this->addChild(hero);
+	this->addChild(hero, 5);
 
 	this->scheduleUpdate();
 
@@ -81,6 +81,18 @@ bool HelloWorld::init()
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
 		accelerateListener, this);
 
+	// shoot button
+	MenuItemImage* closeItem = MenuItemImage::create(
+								"CloseNormal.png",
+								"CloseSelected.png",
+								 this,
+								 menu_selector(HelloWorld::buttonControl)
+								);
+	closeItem->setPosition(Vec2(winSize.width * .125,
+		winSize.height * .125));
+	Menu* menu = Menu::create(closeItem, nullptr);
+	menu->setPosition(Vec2());
+	this->addChild(menu, 1);
     return true;
 }
 
@@ -119,4 +131,14 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
 void HelloWorld::accelerated(Acceleration* acceleration, Event* event)
 {
 	distFraction = visibleSize.height* acceleration->y;
+}
+
+void HelloWorld::buttonControl(Ref* sender)
+{
+	Sprite* test = Sprite::create("CloseNormal.png");
+	test->setPosition(Vec2(
+		hero->getPositionX() + hero->getContentSize().width / 2,
+		hero->getPositionY()));
+	test->setScale(0.5);
+	this->addChild(test);
 }
