@@ -64,6 +64,23 @@ bool HelloWorld::init()
 	this->addChild(hero);
 
 	this->scheduleUpdate();
+
+	// touch dispatcher
+	EventListenerTouchOneByOne* touchListener =
+		EventListenerTouchOneByOne::create();
+	touchListener->onTouchBegan =
+		CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
+	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
+		touchListener, this);
+
+	// acceleration dispatcher
+	Device::setAccelerometerEnabled(true); // enable accelerometer first
+	EventListenerAcceleration* accelerateListener =
+		EventListenerAcceleration::create(
+			CC_CALLBACK_2(HelloWorld::accelerated,this));
+	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
+		accelerateListener, this);
+
     return true;
 }
 
@@ -81,9 +98,25 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::update(float delta)
 {
-	Vec2 p = hero->getPosition();
-	hero->setPosition(p.x + 5, p.y);
-	if (hero->getPositionX() - hero->getContentSize().width / 2 > winSize.width)
-		hero->setPosition(Vec2(0.0 - hero->getContentSize().width / 2,
-									 hero->getPositionY()));
+	float maxY = winSize.height - hero->getContentSize().height / 2;
+	float minY = hero->getContentSize().height / 2;
+	float distStep = (distFraction * delta);
+	float newY = hero->getPosition().y + distStep;
+	newY = MIN(MAX(newY, minY), maxY);
+	hero->setPosition(ccp(hero->getPosition().x, newY));
+}
+
+bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
+{
+	Vec2 location =
+		Director::getInstance()->convertToGL(touch->getLocationInView());
+	CCMoveTo* moveAction = CCMoveTo::create(1, location);
+	hero->runAction(EaseInOut::create(moveAction,1));
+	CCLOG("Touch");
+	return true;
+}
+
+void HelloWorld::accelerated(Acceleration* acceleration, Event* event)
+{
+	distFraction = visibleSize.height* acceleration->y;
 }
