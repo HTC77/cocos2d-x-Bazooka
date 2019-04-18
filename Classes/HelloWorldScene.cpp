@@ -93,6 +93,11 @@ bool HelloWorld::init()
 	Menu* menu = Menu::create(closeItem, nullptr);
 	menu->setPosition(Vec2());
 	this->addChild(menu, 1);
+
+	// enemy
+	enemy = Enemy::create();
+	this->addChild(enemy);
+
     return true;
 }
 
@@ -116,6 +121,8 @@ void HelloWorld::update(float delta)
 	float newY = hero->getPosition().y + distStep;
 	newY = MIN(MAX(newY, minY), maxY);
 	hero->setPosition(ccp(hero->getPosition().x, newY));
+	
+	enemy->update();
 }
 
 bool HelloWorld::onTouchBegan(Touch* touch, Event* event)

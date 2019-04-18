@@ -26,6 +26,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "Enemy.h"
 USING_NS_CC;
 
 class HelloWorld : public cocos2d::Scene
@@ -53,6 +54,7 @@ public:
 	void accelerated(Acceleration* acceleration, Event* event);
 	float distFraction;
 	void buttonControl(Ref* sender);
+	Enemy* enemy;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
