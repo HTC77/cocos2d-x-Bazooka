@@ -89,13 +89,11 @@ bool HelloWorld::init()
 	jumping = false;
 	jumpTimer = 0;
 
-	// frame
-	float frameWidth = Director::getInstance()->getOpenGLView()->getFrameSize().width;
-	float frameHeight = Director::getInstance()->getOpenGLView()->getFrameSize().height;
-	Label* label = Label::create(StringUtils::format("frame width: %f \n frame height: %f",
-		frameWidth, frameHeight), "Arial", 27);
-	label->setPosition(Vec2(winSize.width/2, winSize.height * 0.8));
-	this->addChild(label);
+	// score label
+	scoreLabel = Label::createWithBMFont("PixelFont.fnt", "Score = 0");
+	scoreLabel->setPosition(Vec2(visibleSize.width * 0.870, visibleSize.height * 0.9));
+	this->addChild(scoreLabel, 10);
+	scoreLabel->setScale(0.5);
 
     return true;
 }
@@ -114,45 +112,54 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::update(float delta)
 {
-	gameplayLayer->update();
+	if (!gameplayLayer->gameOver)
+	{
+		char scoreTxt[100];
+		sprintf(scoreTxt, "Score: %d", gameplayLayer->score);
+		scoreLabel->setString(scoreTxt);
 
-	if (jumping)
+		gameplayLayer->update();
+
+		if (jumping)
+		{
+			jumpTimer = 10;
+			jumping = false;
+		}
+		if (jumpTimer > 0)
+		{
+			jumpTimer--;
+			Vec2 p = hero->getPosition();
+			Vec2 mP = p + Vec2(0, 7);
+			hero->setPosition(mP);
+		}
+		else
+		{
+			jumpTimer = 0;
+			Vec2 p = hero->getPosition();
+			Vec2 pM = p + gravity;
+			hero->setPosition(pM);
+		}
+		float maxY = visibleSize.height - hero->getContentSize().height / 2;
+		float minY = hero->getContentSize().height / 2;
+		float newY = hero->getPosition().y;
+		newY = MIN(MAX(newY, minY), maxY);
+		hero->setPosition(Vec2(hero->getPosition().x, newY));
+	}else
 	{
-		jumpTimer = 10;
-		jumping = false;
+		gameOver();
 	}
-	if (jumpTimer>0)
-	{
-		jumpTimer--;
-		Vec2 p = hero->getPosition();
-		Vec2 mP = p + Vec2(0, 7);
-		hero->setPosition(mP);
-	}
-	else
-	{
-		jumpTimer = 0;
-		Vec2 p = hero->getPosition();
-		Vec2 pM = p + gravity;
-		hero->setPosition(pM);
-	}
-	float maxY = visibleSize.height - hero->getContentSize().height / 2;
-	float minY = hero->getContentSize().height / 2;
-	float newY = hero->getPosition().y;
-	newY = MIN(MAX(newY, minY), maxY);
-	hero->setPosition(Vec2(hero->getPosition().x, newY));
 }
 
 bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
 {
 	Vec2 location =
 		Director::getInstance()->convertToGL(touch->getLocationInView());
-	if (rightButton.containsPoint(location))
+	if(!gameplayLayer->gameOver)
 	{
-		fireRocket();
-	}
-	if (leftButton.containsPoint(location))
-	{
-		jumping = true;
+		if (rightButton.containsPoint(location))
+			fireRocket();
+		if (leftButton.containsPoint(location))
+			jumping = true;
 	}
 	return true;
 }
@@ -174,4 +181,21 @@ void HelloWorld::fireRocket()
 	Projectile* rocket = Projectile::create(p, 2);
 	gameplayLayer->addChild(rocket);
 	gameplayLayer->getPlayerBulletsArray()->pushBack(rocket);
+}
+
+void HelloWorld::gameOver()
+{
+	if(gameplayLayer->getEnemiesArray()->size() > 0)
+	{
+		for (int i = 0; i < gameplayLayer->getEnemiesArray()->size(); ++i)
+		{
+			Enemy* en = gameplayLayer->getEnemiesArray()->at(i);
+			en->unscheduleAllSelectors();
+		}
+	}
+	Label* gameOverLabel =
+		Label::createWithBMFont("PixelFont.fnt", "GAMEOVER");
+	gameOverLabel->setPosition(Vec2(visibleSize.width * 0.5,
+		visibleSize.height * 0.6));
+	this->addChild(gameOverLabel, 10);
 }

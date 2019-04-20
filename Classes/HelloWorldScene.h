@@ -62,6 +62,9 @@ public:
 	Vec2 gravity;
 	int jumpTimer;
 	bool jumping;
+
+	void gameOver();
+	Label* scoreLabel;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

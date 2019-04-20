@@ -32,6 +32,10 @@ public:
 
 	bool checkBoxCollision(Sprite* box1, Sprite* box2);
 	Sprite* hero;
+
+	int score;
+	bool gameOver;
+
 };
 
 #endif // __BazookaGame_GameplayLayer__

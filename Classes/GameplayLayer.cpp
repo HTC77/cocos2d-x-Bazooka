@@ -7,6 +7,8 @@ GameplayLayer::GameplayLayer(Sprite* _hero)
 	winSize = Director::getInstance()->getWinSize();
 	origin = Director::getInstance()->getVisibleOrigin();
 	hero = _hero;
+	score = 0;
+	gameOver = false;
 }
 
 GameplayLayer::~GameplayLayer()
@@ -39,7 +41,10 @@ void GameplayLayer::update()
 			Enemy* e = enemies.at(i);
 			e->update();
 			if (e->getPositionX() + e->getContentSize().width / 2 < 0)
+			{
+				gameOver = true;
 				enemiesToBeDeleted.pushBack(e);
+			}
 		}
 	}
 
@@ -82,6 +87,7 @@ void GameplayLayer::update()
 					Enemy* en = enemies.at(j);
 					if (checkBoxCollision(p,en))
 					{
+						score++;
 						this->removeChild(p);
 						playerBullets.eraseObject(p);
 						enemiesToBeDeleted.pushBack(en);
@@ -101,7 +107,7 @@ void GameplayLayer::update()
 			if(checkBoxCollision(pr, hero))
 			{
 				enemyBulletsToBeDeleted.pushBack(pr);
-				return;
+				gameOver = true;
 			}
 		}
 	}
