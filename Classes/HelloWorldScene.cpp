@@ -78,9 +78,16 @@ bool HelloWorld::init()
 	gameplayLayer = new GameplayLayer();
 	this->addChild(gameplayLayer);
 
-	// spawn enemy
+	// spawn enemies
 	this->schedule(schedule_selector(HelloWorld::spawnEnemy), 3.0f);
 
+	// hero controls
+	leftButton = Rect(0,0,visibleSize.width/2,visibleSize.height);
+	rightButton = Rect(visibleSize.width / 2, 0, visibleSize.width / 2,
+		visibleSize.height);
+	gravity = Vec2(0, -5);
+	jumping = false;
+	jumpTimer = 0;
     return true;
 }
 
@@ -99,12 +106,45 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 void HelloWorld::update(float delta)
 {
 	gameplayLayer->update();
+
+	if (jumping)
+	{
+		jumpTimer = 10;
+		jumping = false;
+	}
+	if (jumpTimer>0)
+	{
+		jumpTimer--;
+		Vec2 p = hero->getPosition();
+		Vec2 mP = p + Vec2(0, 7);
+		hero->setPosition(mP);
+	}
+	else
+	{
+		jumpTimer = 0;
+		Vec2 p = hero->getPosition();
+		Vec2 pM = p + gravity;
+		hero->setPosition(pM);
+	}
+	float maxY = visibleSize.height - hero->getContentSize().height / 2;
+	float minY = hero->getContentSize().height / 2;
+	float newY = hero->getPosition().y;
+	newY = MIN(MAX(newY, minY), maxY);
+	hero->setPosition(Vec2(hero->getPosition().x, newY));
 }
 
 bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
 {
 	Vec2 location =
 		Director::getInstance()->convertToGL(touch->getLocationInView());
+	if (rightButton.containsPoint(location))
+	{
+		fireRocket();
+	}
+	if (leftButton.containsPoint(location))
+	{
+		jumping = true;
+	}
 	return true;
 }
 
@@ -115,4 +155,14 @@ void HelloWorld::spawnEnemy(float dt)
 	gameplayLayer->addChild(e);
 	e->shoot(0.016); // first shoot
 	gameplayLayer->getEnemiesArray()->pushBack(e);
+}
+
+void HelloWorld::fireRocket()
+{
+	Vec2 p = hero->getPosition();
+	p.x = p.x + hero->getContentSize().width;
+	p.y = p.y - hero->getContentSize().height * 0.05;
+	Projectile* rocket = Projectile::create(p, 2);
+	gameplayLayer->addChild(rocket);
+	gameplayLayer->getPlayerBulletsArray()->pushBack(rocket);
 }

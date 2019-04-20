@@ -23,6 +23,11 @@ Vector<Projectile*>* GameplayLayer::getEnemyBulletsArray()
 	return &enemyBullets;
 }
 
+Vector<Projectile*>* GameplayLayer::getPlayerBulletsArray()
+{
+	return &playerBullets;
+}
+
 void GameplayLayer::update()
 {
 	// enemies
@@ -49,6 +54,20 @@ void GameplayLayer::update()
 		}
 	}
 
+	// player bullets and remove
+	if(playerBullets.size() > 0)
+	{
+		for (int i = 0; i < playerBullets.size(); ++i)
+		{
+			Projectile* pr = playerBullets.at(i);
+			pr->update();
+			if (pr->getPositionX() >= winSize.width){
+				playerBullets.eraseObject(pr);
+				this->removeChild(pr, true);
+			}
+		}
+	}
+
 	Enemy* target = NULL;
 	for (int i = 0; i < enemiesToBeDeleted.size(); ++i)
 	{
@@ -57,7 +76,8 @@ void GameplayLayer::update()
 		enemiesToBeDeleted.eraseObject(target);
 		this->removeChild(target, true);
 	}
-
+	
+	// remove enemy bullets
 	Projectile* targetP = NULL;
 	for (int i = 0; i < enemyBulletsToBeDeleted.size(); ++i)
 	{
@@ -66,5 +86,6 @@ void GameplayLayer::update()
 		enemyBulletsToBeDeleted.eraseObject(targetP);
 		this->removeChild(targetP, true);
 	}
+	CCLOG("player bullets: %d , enemy bullets %d", playerBullets.size(), enemyBullets.size());
 }
 

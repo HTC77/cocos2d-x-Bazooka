@@ -56,6 +56,12 @@ public:
 	GameplayLayer* gameplayLayer;
 
 	void spawnEnemy(float dt);
+	void fireRocket();
+
+	Rect leftButton, rightButton;
+	Vec2 gravity;
+	int jumpTimer;
+	bool jumping;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

@@ -25,6 +25,9 @@ public:
 	Vector<Projectile*> enemyBulletsToBeDeleted;
 	Vector<Projectile*>* getEnemyBulletsArray();
 
+	Vector<Projectile*> playerBullets;
+	Vector<Projectile*>* getPlayerBulletsArray();
+
 	void update();
 };
 
