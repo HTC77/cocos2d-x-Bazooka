@@ -1,11 +1,12 @@
 #include "GameplayLayer.h"
 #include "SimpleAudioEngine.h"
 
-GameplayLayer::GameplayLayer()
+GameplayLayer::GameplayLayer(Sprite* _hero)
 {
 	visibleSize = Director::getInstance()->getVisibleSize();
 	winSize = Director::getInstance()->getWinSize();
 	origin = Director::getInstance()->getVisibleOrigin();
+	hero = _hero;
 }
 
 GameplayLayer::~GameplayLayer()
@@ -68,6 +69,43 @@ void GameplayLayer::update()
 		}
 	}
 
+	//player rocket and enemies collision
+	if (playerBullets.size() >= 0)
+	{
+		for (int i = 0; i < playerBullets.size(); ++i)
+		{
+			Projectile* p = playerBullets.at(i);
+			if (enemies.size() > 0)
+			{
+				for (int j = 0; j < enemies.size(); ++j)
+				{
+					Enemy* en = enemies.at(j);
+					if (checkBoxCollision(p,en))
+					{
+						this->removeChild(p);
+						playerBullets.eraseObject(p);
+						enemiesToBeDeleted.pushBack(en);
+						return; // to get out of the loop.
+					}
+				}
+			}
+		}
+	}
+
+	//enemy bullets and player
+	if(enemyBullets.size() > 0)
+	{
+		for (int i = 0; i < enemyBullets.size(); ++i)
+		{
+			Projectile* pr = enemyBullets.at(i);
+			if(checkBoxCollision(pr, hero))
+			{
+				enemyBulletsToBeDeleted.pushBack(pr);
+				return;
+			}
+		}
+	}
+
 	Enemy* target = NULL;
 	for (int i = 0; i < enemiesToBeDeleted.size(); ++i)
 	{
@@ -86,6 +124,16 @@ void GameplayLayer::update()
 		enemyBulletsToBeDeleted.eraseObject(targetP);
 		this->removeChild(targetP, true);
 	}
-	CCLOG("player bullets: %d , enemy bullets %d", playerBullets.size(), enemyBullets.size());
+}
+
+bool GameplayLayer::checkBoxCollision(Sprite* box1, Sprite* box2)
+{
+	Rect box1Rect = box1->getBoundingBox();
+	Rect box2Rect = box2->getBoundingBox();
+	
+	if(box1Rect.intersectsRect(box2Rect))
+		return true;
+	
+	return false;
 }
 

@@ -75,7 +75,7 @@ bool HelloWorld::init()
 		touchListener, this);
 
 	// gameplay layer
-	gameplayLayer = new GameplayLayer();
+	gameplayLayer = new GameplayLayer(hero);
 	this->addChild(gameplayLayer);
 
 	// spawn enemies
@@ -88,6 +88,15 @@ bool HelloWorld::init()
 	gravity = Vec2(0, -5);
 	jumping = false;
 	jumpTimer = 0;
+
+	// frame
+	float frameWidth = Director::getInstance()->getOpenGLView()->getFrameSize().width;
+	float frameHeight = Director::getInstance()->getOpenGLView()->getFrameSize().height;
+	Label* label = Label::create(StringUtils::format("frame width: %f \n frame height: %f",
+		frameWidth, frameHeight), "Arial", 27);
+	label->setPosition(Vec2(winSize.width/2, winSize.height * 0.8));
+	this->addChild(label);
+
     return true;
 }
 

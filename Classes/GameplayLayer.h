@@ -10,7 +10,7 @@ class GameplayLayer : public Layer
 {
 public:
 
-	GameplayLayer();
+	GameplayLayer(Sprite* _hero);
 	~GameplayLayer();
     
     Size visibleSize;
@@ -29,6 +29,9 @@ public:
 	Vector<Projectile*>* getPlayerBulletsArray();
 
 	void update();
+
+	bool checkBoxCollision(Sprite* box1, Sprite* box2);
+	Sprite* hero;
 };
 
 #endif // __BazookaGame_GameplayLayer__
