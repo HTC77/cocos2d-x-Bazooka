@@ -185,6 +185,7 @@ void HelloWorld::fireRocket()
 
 void HelloWorld::gameOver()
 {
+	this->unscheduleAllSelectors();
 	if(gameplayLayer->getEnemiesArray()->size() > 0)
 	{
 		for (int i = 0; i < gameplayLayer->getEnemiesArray()->size(); ++i)
@@ -198,4 +199,25 @@ void HelloWorld::gameOver()
 	gameOverLabel->setPosition(Vec2(visibleSize.width * 0.5,
 		visibleSize.height * 0.6));
 	this->addChild(gameOverLabel, 10);
+
+	// high score
+	int highScore = UserDefault::getInstance()->getIntegerForKey("bazookaGameHighScore");
+
+	if (gameplayLayer->score > highScore){
+		UserDefault::getInstance()->setIntegerForKey("bazookaGameHighScore", gameplayLayer->score);
+		Label* newHighScoreLabel = Label::createWithBMFont("PixelFont.fnt", "NEW HIGH SCORE");
+		newHighScoreLabel->setPosition(Vec2(visibleSize.width * 0.5, visibleSize.height * 0.5));
+		this->addChild(newHighScoreLabel, 10);
+		newHighScoreLabel->setScale(0.75f);
+		Label* newScoreLabel = Label::createWithBMFont("PixelFont.fnt",
+			StringUtils::format("%d", gameplayLayer->score));
+		newScoreLabel->setPosition(Vec2(visibleSize.width * 0.5,
+			visibleSize.height * 0.4));
+		this->addChild(newScoreLabel, 10);
+	}else{
+		Label* newHighScoreLabel = Label::createWithBMFont("PixelFont.fnt", "BETTER LUCK NEXT TIME");
+		newHighScoreLabel->setPosition(Vec2(visibleSize.width * 0.5, visibleSize.height * 0.5));
+		this->addChild(newHighScoreLabel, 10);
+		newHighScoreLabel->setScale(0.75f);
+	}
 }
