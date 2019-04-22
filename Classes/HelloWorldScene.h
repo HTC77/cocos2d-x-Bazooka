@@ -28,6 +28,7 @@
 #include "cocos2d.h"
 #include "Enemy.h"
 #include "GameplayLayer.h"
+#include "HUDLayer.h"
 USING_NS_CC;
 
 class HelloWorld : public cocos2d::Scene
@@ -64,7 +65,8 @@ public:
 	bool jumping;
 
 	void gameOver();
-	Label* scoreLabel;
+
+	HUDLayer* hudLayer;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

@@ -89,11 +89,9 @@ bool HelloWorld::init()
 	jumping = false;
 	jumpTimer = 0;
 
-	// score label
-	scoreLabel = Label::createWithBMFont("PixelFont.fnt", "Score = 0");
-	scoreLabel->setPosition(Vec2(visibleSize.width * 0.870, visibleSize.height * 0.9));
-	this->addChild(scoreLabel, 10);
-	scoreLabel->setScale(0.5);
+	// HudLayer
+	hudLayer = new HUDLayer();
+	this->addChild(hudLayer, 15); //keeping at top most layer
 
     return true;
 }
@@ -114,9 +112,7 @@ void HelloWorld::update(float delta)
 {
 	if (!gameplayLayer->gameOver)
 	{
-		char scoreTxt[100];
-		sprintf(scoreTxt, "Score: %d", gameplayLayer->score);
-		scoreLabel->setString(scoreTxt);
+		hudLayer->updateScore(gameplayLayer->score);
 
 		gameplayLayer->update();
 
