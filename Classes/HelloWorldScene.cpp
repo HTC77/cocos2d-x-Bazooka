@@ -129,6 +129,14 @@ bool HelloWorld::init()
 	hudLayer = new HUDLayer();
 	this->addChild(hudLayer, 15); //keeping at top most layer
 
+	// skeleton animation
+	skeletonNode = spine::SkeletonAnimation::createWithJsonFile(
+		"player.json", "player.atlas", 1.0f);
+	skeletonNode->addAnimation(0, "runCycle", true, 0);
+	skeletonNode->setPosition(Vec2(visibleSize.width / 2,
+		skeletonNode->getContentSize().height / 2));
+	this->addChild(skeletonNode);
+
     return true;
 }
 

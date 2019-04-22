@@ -30,6 +30,7 @@
 #include "GameplayLayer.h"
 #include "HUDLayer.h"
 #include "ScrollingBgLayer.h"
+#include "spine/SkeletonAnimation.h"
 USING_NS_CC;
 
 typedef enum ActionState
@@ -97,6 +98,9 @@ public:
 	void idleAnim();
 	void boostAnim();
 	void AnimationStates();
+
+	spine::SkeletonAnimation* skeletonNode;
+
 };
 
 #endif // __HELLOWORLD_SCENE_H__
