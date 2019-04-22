@@ -67,12 +67,13 @@ bool HelloWorld::init()
 	this->scheduleUpdate();
 
 	// touch dispatcher
-	EventListenerTouchOneByOne* touchListener =
+	touchListener =
 		EventListenerTouchOneByOne::create();
 	touchListener->onTouchBegan =
 		CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
 		touchListener, this);
+	touchListener->retain();
 
 	// gameplay layer
 	gameplayLayer = new GameplayLayer(hero);
@@ -220,10 +221,33 @@ void HelloWorld::gameOver()
 
 void HelloWorld::gamePaused()
 {
-	
+	this->unscheduleUpdate();
+	this->unschedule(schedule_selector(HelloWorld::spawnEnemy));	
+	this->getEventDispatcher()->removeEventListener(touchListener);
+
+	if (gameplayLayer->getEnemiesArray()->size() > 0)
+	{
+		for (int i = 0; i < gameplayLayer->getEnemiesArray()->size(); ++i)
+		{
+			Enemy* en = gameplayLayer->getEnemiesArray()->at(i);
+			en->pauseSchedulerAndActions();
+		}
+	}
 }
 
 void HelloWorld::gameResumed()
 {
+	this->scheduleUpdate();
+	this->schedule(schedule_selector(HelloWorld::spawnEnemy), 3.0f);
+	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
+		touchListener, this);
 
+	if (gameplayLayer->getEnemiesArray()->size() > 0)
+	{
+		for (int i = 0; i < gameplayLayer->getEnemiesArray()->size(); ++i)
+		{
+			Enemy* en = gameplayLayer->getEnemiesArray()->at(i);
+			en->resumeSchedulerAndActions();
+		}
+	}
 }

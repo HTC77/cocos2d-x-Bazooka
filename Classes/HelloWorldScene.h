@@ -48,10 +48,13 @@ public:
 	Vec2 origin;
 	Sprite* hero;
 	void update(float delta) override;
+
+	EventListenerTouchOneByOne* touchListener;
 	bool onTouchBegan(Touch* touch, Event* event);
 	void onTouchMoved(Touch* touch, Event* event);
 	void onTouchEnded(Touch* touch, Event* event);
 	void onTouchCanceled(Touch* touch, Event* event);
+
 
 	GameplayLayer* gameplayLayer;
 
