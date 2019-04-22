@@ -217,3 +217,13 @@ void HelloWorld::gameOver()
 		newHighScoreLabel->setScale(0.75f);
 	}
 }
+
+void HelloWorld::gamePaused()
+{
+	
+}
+
+void HelloWorld::gameResumed()
+{
+
+}

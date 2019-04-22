@@ -40,8 +40,8 @@ public:
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
-    
-    // implement the "static create()" method manually
+
+	// implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 
 	Size visibleSize, winSize;
@@ -53,7 +53,6 @@ public:
 	void onTouchEnded(Touch* touch, Event* event);
 	void onTouchCanceled(Touch* touch, Event* event);
 
-	float distFraction;
 	GameplayLayer* gameplayLayer;
 
 	void spawnEnemy(float dt);
@@ -67,6 +66,9 @@ public:
 	void gameOver();
 
 	HUDLayer* hudLayer;
+
+	void gamePaused();
+	void gameResumed();
 };
 
 #endif // __HELLOWORLD_SCENE_H__

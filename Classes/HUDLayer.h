@@ -16,6 +16,11 @@ public:
 	Label* scoreLabel;
 	void updateScore(int score);
 
+	Menu* pauseMenu;
+	Menu* resumeMenu;
+	void pauseGame(Ref* sender);
+	void resumeGame(Ref* sender);
+
 };
 
 #endif // __BazookaGame_HUDLayer__
