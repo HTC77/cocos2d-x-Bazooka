@@ -61,6 +61,43 @@ bool HelloWorld::init()
 	hero->setPosition(Vec2(winSize.width * 0.25, winSize.height * 0.5));
 	this->addChild(hero, 5);
 
+	//player animation
+	SpriteBatchNode* spriteBatch =
+		SpriteBatchNode::create("player_anim.png");
+	SpriteFrameCache* cache = SpriteFrameCache::getInstance();
+	cache->addSpriteFramesWithFile("player_anim.plist");
+	hero->createWithSpriteFrameName("player_idle_1.png");
+	hero->addChild(spriteBatch);
+
+	//idle animation
+	Vector<SpriteFrame*> animFrames(4);
+	char str1[100] = { 0 };
+	for (int i = 1; i <= 4; ++i)
+	{
+		sprintf(str1, "player_idle_%d.png", i);
+		SpriteFrame* frame = cache->spriteFrameByName(str1);
+		animFrames.pushBack(frame);
+	}
+
+	Animation* idleAnimation =
+		Animation::createWithSpriteFrames(animFrames, 0.25f);
+	mIdleAction = RepeatForever::create(Animate::create(idleAnimation));
+	mIdleAction->retain();
+
+	//boost animation
+	animFrames.clear();
+	char str2[100] = { 0 };
+	for (int i = 1; i <= 4; i++)
+	{
+		sprintf(str2, "player_boost_%d.png", i);
+		SpriteFrame* frame = cache->spriteFrameByName(str2);
+		animFrames.pushBack(frame);
+	}
+	Animation* boostAnimation =
+		Animation::createWithSpriteFrames(animFrames, 0.25f);
+	mBoostAction = RepeatForever::create(Animate::create(boostAnimation));
+	mBoostAction->retain();
+	
 	// enable update
 	this->scheduleUpdate();
 
@@ -111,6 +148,9 @@ void HelloWorld::update(float delta)
 {
 	if (!gameplayLayer->gameOver)
 	{
+
+		this->AnimationStates();
+
 		scrollingBgLayer->update();
 
 		hudLayer->updateScore(gameplayLayer->score);
@@ -124,6 +164,7 @@ void HelloWorld::update(float delta)
 		}
 		if (jumpTimer > 0)
 		{
+			mPlayerState = kPlayerStateBoost;
 			jumpTimer--;
 			Vec2 p = hero->getPosition();
 			Vec2 mP = p + Vec2(0, 7);
@@ -131,6 +172,7 @@ void HelloWorld::update(float delta)
 		}
 		else
 		{
+			mPlayerState = kPLayerStateIdle;
 			jumpTimer = 0;
 			Vec2 p = hero->getPosition();
 			Vec2 pM = p + gravity;
@@ -249,5 +291,38 @@ void HelloWorld::gameResumed()
 			Enemy* en = gameplayLayer->getEnemiesArray()->at(i);
 			en->resumeSchedulerAndActions();
 		}
+	}
+}
+
+
+void HelloWorld::AnimationStates()
+{
+	switch (mPlayerState)
+	{
+	case kPLayerStateIdle:
+		this->idleAnim(); break;
+	case kPlayerStateBoost:
+		this->boostAnim(); break;
+	default: break;
+	}
+}
+
+void HelloWorld::idleAnim()
+{
+	if (mActionState != kActionStateIdle)
+	{
+		hero->stopAllActions();
+		hero->runAction(mIdleAction);
+		mActionState = kActionStateIdle;
+	}
+}
+
+void HelloWorld::boostAnim()
+{
+	if (mActionState != kActionStateBoost)
+	{
+		hero->stopAllActions();
+		hero->runAction(mBoostAction);
+		mActionState = kActionStateBoost;
 	}
 }

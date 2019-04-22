@@ -32,6 +32,19 @@
 #include "ScrollingBgLayer.h"
 USING_NS_CC;
 
+typedef enum ActionState
+{
+	kActionStateNone = 0,
+	kActionStateIdle,
+	kActionStateBoost
+};
+typedef enum PlayerState
+{
+	kPlayerStateNone = 0,
+	kPLayerStateIdle,
+	kPlayerStateBoost
+};
+
 class HelloWorld : public cocos2d::Scene
 {
 public:
@@ -74,6 +87,16 @@ public:
 	void gamePaused();
 	void gameResumed();
 	ScrollingBgLayer* scrollingBgLayer;
+
+	ActionState mActionState;
+	PlayerState mPlayerState;
+
+	Action* mIdleAction;
+	Action* mBoostAction;
+
+	void idleAnim();
+	void boostAnim();
+	void AnimationStates();
 };
 
 #endif // __HELLOWORLD_SCENE_H__
