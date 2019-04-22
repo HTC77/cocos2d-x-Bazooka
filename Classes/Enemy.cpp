@@ -39,6 +39,26 @@ bool Enemy::init(GameplayLayer* _gameplayLayer)
 
 	this->schedule(schedule_selector(Enemy::shoot), 1.3);
 
+	//enemy animation
+	SpriteBatchNode* spriteBatch =
+		SpriteBatchNode::create("enemy_anim.png");
+	SpriteFrameCache* cache = SpriteFrameCache::getInstance();
+	cache->addSpriteFramesWithFile("enemy_anim.plist");
+	this->createWithSpriteFrameName("enemy_idle_1.png");
+	this->addChild(spriteBatch);
+	
+	Vector<SpriteFrame*> animFrames(4);
+	char str1[100] = { 0 };
+	for (int i = 1; i <= 4; ++i)
+	{
+		sprintf(str1, "enemy_idle_%d.png", i);
+		SpriteFrame* frame = cache->spriteFrameByName(str1);
+		animFrames.pushBack(frame);
+	}
+	Animation* idleAnimation =
+		Animation::createWithSpriteFrames(animFrames, 0.25f);
+	this->runAction(RepeatForever::create(Animate::create(idleAnimation)));
+
     return true;
 }
 
