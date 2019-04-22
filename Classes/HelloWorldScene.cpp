@@ -52,11 +52,9 @@ bool HelloWorld::init()
     winSize = Director::getInstance()->getWinSize();
     origin = Director::getInstance()->getVisibleOrigin();
 
-	// background
-	Sprite* bg = Sprite::create("bookGame_Bg.png");
-	bg->setPosition(Vec2(origin.x + visibleSize.width * 0.5f,
-		origin.y + visibleSize.height * 0.5f));
-	this->addChild(bg);
+	// parallax  background
+	scrollingBgLayer = new ScrollingBgLayer(3.0f);
+	this->addChild(scrollingBgLayer);
 
 	// hero
 	hero = Sprite::create("bookGame_tinyBazooka.png");
@@ -113,6 +111,8 @@ void HelloWorld::update(float delta)
 {
 	if (!gameplayLayer->gameOver)
 	{
+		scrollingBgLayer->update();
+
 		hudLayer->updateScore(gameplayLayer->score);
 
 		gameplayLayer->update();

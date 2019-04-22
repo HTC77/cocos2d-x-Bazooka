@@ -29,6 +29,7 @@
 #include "Enemy.h"
 #include "GameplayLayer.h"
 #include "HUDLayer.h"
+#include "ScrollingBgLayer.h"
 USING_NS_CC;
 
 class HelloWorld : public cocos2d::Scene
@@ -72,6 +73,7 @@ public:
 
 	void gamePaused();
 	void gameResumed();
+	ScrollingBgLayer* scrollingBgLayer;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
