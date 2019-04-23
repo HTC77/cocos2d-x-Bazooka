@@ -1,5 +1,6 @@
 #include "GameplayLayer.h"
 #include "SimpleAudioEngine.h"
+#include "ParticleLayer.h"
 
 GameplayLayer::GameplayLayer(Sprite* _hero)
 {
@@ -89,6 +90,7 @@ void GameplayLayer::update()
 					{
 						score++;
 
+						// particles
 						ParticleSystemQuad* smokeParticle =
 							ParticleSystemQuad::create("smoke.plist");
 						smokeParticle->setPosition(en->getPosition());
@@ -99,6 +101,9 @@ void GameplayLayer::update()
 						dustParticle->setPosition(en->getPosition());
 						this->addChild(dustParticle);
 						dustParticle->setAutoRemoveOnFinish(true);
+
+						ParticleLayer* pLayer = new ParticleLayer(en->getPosition());
+						this->addChild(pLayer);
 
 						this->removeChild(p);
 						playerBullets.eraseObject(p);
