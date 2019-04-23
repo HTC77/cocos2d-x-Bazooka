@@ -24,6 +24,7 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include "MainMenuScene.h"
 
 
 Scene* HelloWorld::createScene()
@@ -291,6 +292,16 @@ void HelloWorld::gameOver()
 		this->addChild(newHighScoreLabel, 10);
 		newHighScoreLabel->setScale(0.75f);
 	}
+
+	MenuItemImage* mainmenuItem = MenuItemImage::create(
+		"_bookgame_UI_mainmenu.png",
+		"_bookgame_UI_mainmenu.png", this,
+		menu_selector(HelloWorld::mainMenuScene));
+	mainmenuItem->setPosition(Vec2(visibleSize.width / 2,
+		visibleSize.height * 0.2));
+	Menu* mainMenu = Menu::create(mainmenuItem,NULL);
+	mainMenu->setPosition(Point());
+	this->addChild(mainMenu);
 }
 
 void HelloWorld::gamePaused()
@@ -337,6 +348,11 @@ void HelloWorld::AnimationStates()
 		this->boostAnim(); break;
 	default: break;
 	}
+}
+
+void HelloWorld::mainMenuScene(Ref* sender)
+{
+	Director::getInstance()->replaceScene(MainMenu::createScene());
 }
 
 void HelloWorld::idleAnim()

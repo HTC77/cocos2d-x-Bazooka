@@ -101,6 +101,8 @@ public:
 
 	ParticleSystemQuad* m_emitter;
 	ParticleSystemQuad* flameParticle;
+
+	void mainMenuScene(Ref* sender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

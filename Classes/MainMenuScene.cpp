@@ -1,5 +1,6 @@
 #include "MainMenuScene.h"
 #include "HelloWorldScene.h"
+#include "OptionsMenuScene.h"
 
 Scene* MainMenu::createScene()
 {
@@ -77,7 +78,8 @@ bool MainMenu::init()
 
 void MainMenu::optionsScene(Ref* pSender)
 {
-	//code to replace Options scene
+	Scene* scene = OptionsMenu::createScene();
+	Director::getInstance()->replaceScene(scene);
 }
 
 void MainMenu::playGame(Ref* pSender)
