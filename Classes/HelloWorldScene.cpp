@@ -129,6 +129,12 @@ bool HelloWorld::init()
 	hudLayer = new HUDLayer();
 	this->addChild(hudLayer, 15); //keeping at top most layer
 
+	// flameParticle: jet boost particle
+	flameParticle = ParticleSystemQuad::create("jetBoost.plist");
+	flameParticle->setPosition(hero->getPosition() +
+							   Vec2(-hero->getContentSize().width * 0.25, 0));
+	this->addChild(flameParticle);
+
     return true;
 }
 
@@ -148,6 +154,8 @@ void HelloWorld::update(float delta)
 {
 	if (!gameplayLayer->gameOver)
 	{
+		flameParticle->setPosition(hero->getPosition() +
+			Vec2(-hero->getContentSize().width * 0.25, 0));
 
 		this->AnimationStates();
 

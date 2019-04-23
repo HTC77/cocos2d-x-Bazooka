@@ -100,6 +100,7 @@ public:
 	void AnimationStates();
 
 	ParticleSystemQuad* m_emitter;
+	ParticleSystemQuad* flameParticle;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
