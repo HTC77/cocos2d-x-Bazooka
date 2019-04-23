@@ -40,6 +40,7 @@ void HUDLayer::updateScore(int score)
 
 void HUDLayer::pauseGame(Ref* sender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pop.wav");
 	HelloWorld* helloWorld = (HelloWorld*)this->getParent();
 	if (!helloWorld->gameplayLayer->gameOver)
 	{
@@ -62,6 +63,7 @@ void HUDLayer::pauseGame(Ref* sender)
 
 void HUDLayer::resumeGame(Ref* sender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pop.wav");
 	pauseMenu->setEnabled(true);
 	this->removeChild(resumeMenu);
 	HelloWorld* helloWorld = dynamic_cast<HelloWorld*>(getParent());

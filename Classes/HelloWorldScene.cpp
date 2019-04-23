@@ -223,6 +223,7 @@ void HelloWorld::spawnEnemy(float dt)
 
 void HelloWorld::fireRocket()
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("fireRocket.wav");
 	// particle system
 	m_emitter = ParticleExplosion::create();
 	m_emitter->setPosition(hero->getPosition() +
@@ -257,6 +258,7 @@ void HelloWorld::fireRocket()
 
 void HelloWorld::gameOver()
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pop.wav");
 	this->unscheduleAllSelectors();
 	if(gameplayLayer->getEnemiesArray()->size() > 0)
 	{

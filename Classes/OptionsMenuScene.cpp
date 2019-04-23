@@ -1,5 +1,6 @@
 #include "OptionsMenuScene.h"
 #include "MainMenuScene.h"
+#include "SimpleAudioEngine.h"
 
 Scene* OptionsMenu::createScene()
 {
@@ -50,12 +51,14 @@ bool OptionsMenu::init()
 
 void OptionsMenu::reset(CCObject* pSender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pop.wav");
 	UserDefault::getInstance()->setIntegerForKey("bazookaGameHighScore", 0);
 	UserDefault::getInstance()->flush();
 }
 
 void OptionsMenu::mainMenu(CCObject* pSender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pop.wav");
 	Scene* scene = MainMenu::createScene();
 	Director::getInstance()->replaceScene(scene);
 }

@@ -89,6 +89,8 @@ void GameplayLayer::update()
 					if (checkBoxCollision(p,en))
 					{
 						score++;
+						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("enemyKill.wav");
+						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("rocketExplode.wav");
 
 						// particles
 						ParticleSystemQuad* smokeParticle =
@@ -124,6 +126,7 @@ void GameplayLayer::update()
 			if(checkBoxCollision(pr, hero))
 			{
 				enemyBulletsToBeDeleted.pushBack(pr);
+				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("playerKill.wav");
 				gameOver = true;
 			}
 		}

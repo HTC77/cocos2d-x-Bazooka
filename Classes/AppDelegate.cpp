@@ -101,8 +101,20 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic(
 		"bgMusic.wav");
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
-		"bgMusic.wav");
-	
+		"bgMusic.wav",true);
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(
+		"enemyKill.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(
+		"fireRocket.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(
+		"gunshot.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(
+		"playerKill.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(
+		"pop.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(
+		"rocketExplode.wav");
+
     // Set the design resolution
 	glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::EXACT_FIT);
 

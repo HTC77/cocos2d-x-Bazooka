@@ -1,6 +1,7 @@
 #include "MainMenuScene.h"
 #include "HelloWorldScene.h"
 #include "OptionsMenuScene.h"
+#include "SimpleAudioEngine.h"
 
 Scene* MainMenu::createScene()
 {
@@ -84,11 +85,13 @@ void MainMenu::optionsScene(Ref* pSender)
 
 void MainMenu::playGame(Ref* pSender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pop.wav");
 	Director::getInstance()->replaceScene(HelloWorld::createScene());
 }
 
 void MainMenu::update(float delta)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pop.wav");
 	scrollingBgLayer->update();
 }
 

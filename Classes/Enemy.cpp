@@ -64,6 +64,7 @@ bool Enemy::init(GameplayLayer* _gameplayLayer)
 
 void Enemy::shoot(float delta)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("gunshot.wav");
 	Vec2 p = this->getPosition();
 	p.x = p.x - this->getContentSize().width / 2;
 	p.y = p.y - this->getContentSize().height * 0.05;
