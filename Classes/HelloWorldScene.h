@@ -99,8 +99,7 @@ public:
 	void boostAnim();
 	void AnimationStates();
 
-	spine::SkeletonAnimation* skeletonNode;
-
+	ParticleSystemQuad* m_emitter;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

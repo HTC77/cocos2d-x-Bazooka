@@ -129,14 +129,6 @@ bool HelloWorld::init()
 	hudLayer = new HUDLayer();
 	this->addChild(hudLayer, 15); //keeping at top most layer
 
-	// skeleton animation
-	skeletonNode = spine::SkeletonAnimation::createWithJsonFile(
-		"player.json", "player.atlas", 1.0f);
-	skeletonNode->addAnimation(0, "runCycle", true, 0);
-	skeletonNode->setPosition(Vec2(visibleSize.width / 2,
-		skeletonNode->getContentSize().height / 2));
-	this->addChild(skeletonNode);
-
     return true;
 }
 
@@ -199,10 +191,10 @@ void HelloWorld::update(float delta)
 
 bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
 {
-	Vec2 location =
-		Director::getInstance()->convertToGL(touch->getLocationInView());
 	if(!gameplayLayer->gameOver)
 	{
+		Vec2 location =
+			Director::getInstance()->convertToGL(touch->getLocationInView());
 		if (rightButton.containsPoint(location))
 			fireRocket();
 		if (leftButton.containsPoint(location))
@@ -222,6 +214,30 @@ void HelloWorld::spawnEnemy(float dt)
 
 void HelloWorld::fireRocket()
 {
+	// particle system
+	m_emitter = ParticleExplosion::create();
+	m_emitter->setPosition(hero->getPosition() +
+	Vec2(hero->getContentSize().width / 2, 0));
+	m_emitter->setStartColor(Color4F(1.0, 1.0, 1.0, 1.0));
+	m_emitter->setEndColor(Color4F(0.0, 0.0, 0.0, 0.0));
+	m_emitter->setTotalParticles(1000);
+	m_emitter->setLife(0.25);
+	m_emitter->setSpeed(2.0);
+	m_emitter->setSpeedVar(30.0);
+
+	//** gravity
+	m_emitter->setEmitterMode(ParticleSystem::Mode::GRAVITY);
+	m_emitter->setGravity(Vec2(0, 90));
+
+	//** mode radius
+	m_emitter->setEmitterMode(ParticleSystem::Mode::RADIUS);
+	m_emitter->setStartRadius(0);
+	m_emitter->setStartRadiusVar(50);
+	m_emitter->setRotatePerSecond(2);
+	m_emitter->setRotatePerSecondVar(5);
+
+	this->addChild(m_emitter);
+	
 	Vec2 p = hero->getPosition();
 	p.x = p.x + hero->getContentSize().width;
 	p.y = p.y - hero->getContentSize().height * 0.05;
