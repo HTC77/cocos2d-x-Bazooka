@@ -37,6 +37,7 @@ bool OptionsMenu::init()
 	MenuItemImage* mainMenuItem =
 			MenuItemImage::create("_bookgame_UI_mainmenu.png", "_bookgame_UI_mainmenu.png",
 				this, menu_selector(OptionsMenu::mainMenu));
+
 	mainMenuItem->setPosition(Vec2(visibleSize.width * 0.5 + visibleSize.width
 		* 0.125, visibleSize.height * 0.5));
 
@@ -45,6 +46,34 @@ bool OptionsMenu::init()
 	this->addChild(menu, 10);
 
 	this->scheduleUpdate();
+
+	//sound onoff items
+	soundOnItem = MenuItemImage::create(
+		"_bookgame_UI_soundON.png", "_bookgame_UI_soundON.png", this, NULL);
+	soundOffItem = MenuItemImage::create(
+	"_bookgame_UI_soundOFF.png", "_bookgame_UI_soundOFF.png", this, NULL);
+
+	bool isPaused = UserDefault::getInstance()->getBoolForKey("tinyBazooka_kSoundPausedKey");
+
+	MenuItemToggle* soundToggleItem;
+	if(isPaused == false)
+	{
+		soundToggleItem = MenuItemToggle::createWithTarget(this,
+			menu_selector(OptionsMenu::soundOnOff),
+			soundOnItem,
+			soundOffItem, NULL);
+	}else
+	{
+		soundToggleItem = MenuItemToggle::createWithTarget(this,
+			menu_selector(OptionsMenu::soundOnOff),
+			soundOffItem,
+			soundOnItem , NULL);
+	}
+
+	soundToggleItem->setPosition(Vec2(visibleSize.width* 0.5,
+		visibleSize.height * 0.5));
+
+	menu->addChild(soundToggleItem);
 
     return true;
 }
@@ -66,5 +95,24 @@ void OptionsMenu::mainMenu(CCObject* pSender)
 void OptionsMenu::update(float delta)
 {
 	scrollingBgLayer->update();
+}
+
+void OptionsMenu::soundOnOff(Ref* sender)
+{
+	MenuItemToggle* toggleItem = dynamic_cast<MenuItemToggle*>(sender);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pop.wav");
+	if (toggleItem->getSelectedItem() == soundOffItem)
+	{
+		UserDefault::getInstance()->setBoolForKey("tinyBazooka_kSoundPausedKey",
+			true);
+		UserDefault::getInstance()->flush();
+		CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+	}else if (toggleItem->getSelectedItem() == soundOnItem)
+	{
+		UserDefault::getInstance()->setBoolForKey("tinyBazooka_kSoundPausedKey",
+			false);
+		UserDefault::getInstance()->flush();
+		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+	}
 }
 

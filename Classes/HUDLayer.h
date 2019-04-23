@@ -20,7 +20,7 @@ public:
 	Menu* resumeMenu;
 	void pauseGame(Ref* sender);
 	void resumeGame(Ref* sender);
-
+	bool isPaused;
 };
 
 #endif // __BazookaGame_HUDLayer__

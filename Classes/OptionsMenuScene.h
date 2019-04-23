@@ -23,6 +23,10 @@ public:
     CREATE_FUNC(OptionsMenu);
 	void update(float delta) override;
 
+	MenuItemImage* soundOnItem;
+	MenuItemImage* soundOffItem;
+
+	void soundOnOff(Ref* sender);
 };
 
 #endif // __BazookaGame_OptionsMenuScene___

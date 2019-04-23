@@ -97,10 +97,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
+	bool isPaused = UserDefault::getInstance()->getBoolForKey("tinyBazooka_kSoundPausedKey");
 
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic(
 		"bgMusic.wav");
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
+	if(!isPaused) CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
 		"bgMusic.wav",true);
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(
 		"enemyKill.wav");
@@ -144,21 +145,26 @@ void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
 
 #if USE_AUDIO_ENGINE
-    AudioEngine::pauseAll();
+     AudioEngine::pauseAll();
 #elif USE_SIMPLE_AUDIO_ENGINE
     SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
     SimpleAudioEngine::getInstance()->pauseAllEffects();
 #endif
+
 }
 
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground() {
     Director::getInstance()->startAnimation();
+	
+	bool isPaused = UserDefault::getInstance()->getBoolForKey("tinyBazooka_kSoundPausedKey");
 
 #if USE_AUDIO_ENGINE
-    AudioEngine::resumeAll();
+   if(!isPaused) AudioEngine::resumeAll();
 #elif USE_SIMPLE_AUDIO_ENGINE
-    SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
-    SimpleAudioEngine::getInstance()->resumeAllEffects();
+	if (isPaused == false){
+		SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+	    SimpleAudioEngine::getInstance()->resumeAllEffects();
+	}
 #endif
 }
