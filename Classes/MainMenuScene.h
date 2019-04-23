@@ -27,6 +27,7 @@ public:
 	void MoveDownFinished(Ref* sender);
 	void MoveUpFinished(Ref* sender);
 	spine::SkeletonAnimation* skeletonNode;
+	void exitGame(Ref* pSender);
 };
 
 #endif // __BazookaGame_MainMenuScene__

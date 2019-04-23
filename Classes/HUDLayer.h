@@ -21,6 +21,8 @@ public:
 	void pauseGame(Ref* sender);
 	void resumeGame(Ref* sender);
 	bool isPaused;
+	void mainMenuScene(Ref* sender);
+	MenuItemImage* mainmenuItem;
 };
 
 #endif // __BazookaGame_HUDLayer__

@@ -74,6 +74,12 @@ bool MainMenu::init()
 
 	this->scheduleUpdate();
 
+	MenuItemImage* exitItem =
+		MenuItemImage::create("exit.png", "exit.png",
+			this, menu_selector(MainMenu::exitGame));
+	exitItem->setPosition(Vec2(visibleSize.width * 0.2, visibleSize.height * 0.5));
+	menu->addChild(exitItem);
+
     return true;
 }
 
@@ -115,5 +121,10 @@ void MainMenu::MoveUpFinished(Ref* sender)
 	 	CallFuncN::create(CC_CALLBACK_1(MainMenu::MoveDownFinished, this));
 	 EaseInOut* easeInOut = EaseInOut::create(actionMove, 1);
 	 sprite->runAction(Sequence::create(easeInOut, actionMoveDone, NULL));
+}
+
+void MainMenu::exitGame(Ref* pSender)
+{
+	Director::getInstance()->end();
 }
 

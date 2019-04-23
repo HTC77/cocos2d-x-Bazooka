@@ -1,6 +1,7 @@
 #include "HUDLayer.h"
 #include "SimpleAudioEngine.h"
 #include "HelloWorldScene.h"
+#include "MainMenuScene.h"
 
 
 HUDLayer::HUDLayer()
@@ -56,9 +57,16 @@ void HUDLayer::pauseGame(Ref* sender)
 		resumeMenu = Menu::create(resumeItem, nullptr);
 		resumeMenu->setPosition(Vec2());
 		this->addChild(resumeMenu);
+		mainmenuItem = MenuItemImage::create(
+			"_bookgame_UI_mainmenu.png",
+			"_bookgame_UI_mainmenu.png", this,
+			menu_selector(HUDLayer::mainMenuScene));
+		mainmenuItem->setPosition(Vec2(visibleSize.width / 2,
+			visibleSize.height * 0.2));
+		resumeMenu->addChild(mainmenuItem);
 		helloWorld->gamePaused();
 	}
-	CCLOG("PASUE CLICKED");
+
 }
 
 void HUDLayer::resumeGame(Ref* sender)
@@ -68,4 +76,9 @@ void HUDLayer::resumeGame(Ref* sender)
 	this->removeChild(resumeMenu);
 	HelloWorld* helloWorld = dynamic_cast<HelloWorld*>(getParent());
 	helloWorld->gameResumed();
+}
+
+void HUDLayer::mainMenuScene(Ref* sender)
+{
+	Director::getInstance()->replaceScene(MainMenu::createScene());
 }
