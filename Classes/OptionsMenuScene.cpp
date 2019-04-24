@@ -112,7 +112,10 @@ void OptionsMenu::soundOnOff(Ref* sender)
 		UserDefault::getInstance()->setBoolForKey("tinyBazooka_kSoundPausedKey",
 			false);
 		UserDefault::getInstance()->flush();
-		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+		if(CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())
+			CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+		else
+			CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("bgMusic.wav");
 	}
 }
 

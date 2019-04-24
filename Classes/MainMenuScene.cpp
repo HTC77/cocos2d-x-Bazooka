@@ -20,7 +20,7 @@ bool MainMenu::init()
 
     visibleSize = Director::getInstance()->getVisibleSize();
     winSize = Director::getInstance()->getWinSize();
-    origin = Director::getInstance()->getVisibleOrigin();  
+    origin = Director::getInstance()->getVisibleOrigin();
 	scrollingBgLayer = new ScrollingBgLayer(3.0);
 	this->addChild(scrollingBgLayer);
 	Label* nameLabel =
@@ -46,11 +46,11 @@ bool MainMenu::init()
 
 	MenuItemImage* playItem =
 		MenuItemImage::create("_bookgame_UI_play.png", "_bookgame_UI_play.png",
-			this, menu_selector(MainMenu::playGame));
+			 CC_CALLBACK_1(MainMenu::playGame,this));
 	playItem->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.5));
 	MenuItemImage* optionsItem =
 		MenuItemImage::create("_bookgame_UI_options.png", "_bookgame_UI_options.png",
-			this, menu_selector(MainMenu::optionsScene));
+			CC_CALLBACK_1(MainMenu::optionsScene,this));
 	optionsItem->setPosition(Vec2(visibleSize.width * 0.75, visibleSize.height * 0.5));
 	//create menu, it's an autorelease object
 	Menu* menu = Menu::create(optionsItem, playItem, NULL);
@@ -72,13 +72,14 @@ bool MainMenu::init()
 	this->addChild(highScoreLabel, 10);
 	highScoreLabel->setScale(0.5);
 
-	this->scheduleUpdate();
 
 	MenuItemImage* exitItem =
 		MenuItemImage::create("exit.png", "exit.png",
-			this, menu_selector(MainMenu::exitGame));
+			 CC_CALLBACK_1(MainMenu::exitGame,this));
 	exitItem->setPosition(Vec2(visibleSize.width * 0.2, visibleSize.height * 0.5));
 	menu->addChild(exitItem);
+
+	this->scheduleUpdate();
 
     return true;
 }
@@ -97,7 +98,6 @@ void MainMenu::playGame(Ref* pSender)
 
 void MainMenu::update(float delta)
 {
-	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pop.wav");
 	scrollingBgLayer->update();
 }
 

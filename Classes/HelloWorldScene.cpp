@@ -91,7 +91,7 @@ bool HelloWorld::init()
 	for (int i = 1; i <= 4; i++)
 	{
 		sprintf(str2, "player_boost_%d.png", i);
-		SpriteFrame* frame = cache->spriteFrameByName(str2);
+		SpriteFrame* frame = cache->getSpriteFrameByName(str2);
 		animFrames.pushBack(frame);
 	}
 	Animation* boostAnimation =
@@ -259,13 +259,13 @@ void HelloWorld::fireRocket()
 void HelloWorld::gameOver()
 {
 	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pop.wav");
-	this->unscheduleAllSelectors();
+	this->pause();
 	if(gameplayLayer->getEnemiesArray()->size() > 0)
 	{
 		for (int i = 0; i < gameplayLayer->getEnemiesArray()->size(); ++i)
 		{
 			Enemy* en = gameplayLayer->getEnemiesArray()->at(i);
-			en->unscheduleAllSelectors();
+			en->pause();
 		}
 	}
 	Label* gameOverLabel =
@@ -308,33 +308,32 @@ void HelloWorld::gameOver()
 
 void HelloWorld::gamePaused()
 {
-	this->unscheduleUpdate();
-	this->unschedule(schedule_selector(HelloWorld::spawnEnemy));	
-	this->getEventDispatcher()->removeEventListener(touchListener);
+	this->pause();
+	hero->pause();
+	flameParticle->pause();
 
 	if (gameplayLayer->getEnemiesArray()->size() > 0)
 	{
 		for (int i = 0; i < gameplayLayer->getEnemiesArray()->size(); ++i)
 		{
 			Enemy* en = gameplayLayer->getEnemiesArray()->at(i);
-			en->pauseSchedulerAndActions();
+			en->pause();
 		}
 	}
 }
 
 void HelloWorld::gameResumed()
 {
-	this->scheduleUpdate();
-	this->schedule(schedule_selector(HelloWorld::spawnEnemy), 3.0f);
-	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(
-		touchListener, this);
+	this->resume();
+	hero->resume();
+	flameParticle->resume();
 
 	if (gameplayLayer->getEnemiesArray()->size() > 0)
 	{
 		for (int i = 0; i < gameplayLayer->getEnemiesArray()->size(); ++i)
 		{
 			Enemy* en = gameplayLayer->getEnemiesArray()->at(i);
-			en->resumeSchedulerAndActions();
+			en->resume();
 		}
 	}
 }
